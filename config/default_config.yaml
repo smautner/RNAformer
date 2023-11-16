@@ -2,7 +2,7 @@
 resume_training: False
 
 experiment:
-  experiments_base_dir: /home/ubuntu/workspace/experiments
+  experiments_base_dir: /home/stefan/workspace/experiments
   project_name: RNAformer
   session_name: rnaformer_1
   experiment_name: ts0_conform_test-0002
@@ -11,7 +11,7 @@ experiment:
 trainer:
   num_nodes: 1
   check_val_every_n_epoch: null #1
-  default_root_dir: /home/ubuntu/workspace/
+  default_root_dir: /home/stefan/workspace/
   enable_checkpointing: true
   enable_model_summary: true
   enable_progress_bar: true
@@ -133,10 +133,17 @@ RNAformer:
   initializer_range: 0.02
   zero_init: false  # init last layer per block before each residual connection
 
+
+
+
+# so the rfam has
+# df=pd.read_pickle('/home/stefan/repos/RNAformer/data/rnafold_rfam_dataset.plk')
 rna_data:
-  dataframe_path: "/data/rna/spotrna1_conform_with_TS0.plk"
+  # dataframe_path: "/data/rna/spotrna1_conform_with_TS0.plk"
+  # dataframe_path: "/home/stefan/repos/RNAformer/data/rnafold_rfam_dataset.plk"
+  dataframe_path: "/home/stefan/repos/pig/yoda/scripts/rnaformer_rfam.plk"
   valid_sets: ['bprna_vl0.plk', 'pdb_vl1']
-  test_sets: ['pdb_ts1', 'pdb_ts2', 'pdb_ts3', 'pdb_ts_hard', 'pdb_puzzles24',]
+  test_sets: ['RF00001', 'RF04183']
   oversample_pdb: 1
   predict_canonical: false
   random_ignore_mat: 0.5
@@ -145,8 +152,8 @@ rna_data:
   num_cpu_worker: 10
   num_gpu_worker: ${trainer.devices}
   min_len: 2
-  max_len: 100
-  similarity: 80
+  max_len: 500
+  similarity: 80 # never used in the code
   seed: 1
   batch_size: 2
   batch_by_token_size: false

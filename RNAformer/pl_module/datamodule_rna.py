@@ -134,7 +134,8 @@ class DataModuleRNA(pl.LightningDataModule):
                 len)]  # remove only '.' samples, should be removed already
             self.logger.info(f'Finished loading dataframe (shape: {df.shape})')
 
-            train_df = df[df['set'].str.contains("train")]
+            train_df = df # [df['set'].str.contains("train")]
+
             train_df = train_df[train_df['sequence'].apply(lambda x: self.min_len <= len(x) <= self.max_len)]
             train_df = train_df.reset_index()
             train_samples = []
@@ -349,10 +350,9 @@ class DataModuleRNA(pl.LightningDataModule):
                 raw_samples = [self.train_samples[i] for i in indices]
 
                 batch = self.collator(raw_samples)
-
                 if self.random_ignore_mat:
                     batch = self.ignore_partial_mat(batch)
-
+                # ASD we go through here:
                 return batch
 
             train_indexes = list(range(len(self.train_samples)))

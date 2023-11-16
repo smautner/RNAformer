@@ -1,7 +1,7 @@
 
 python3 train_probtransformer.py --config=default_config.yaml experiment.session_name=rna_folding_1 \
 experiment.experiment_name=ts0_conform_dim64_32bit \
-rna_data.dataframe_path=/home/ubuntu/tmp/data/spotrna1_conform_with_TS0.plk \
+rna_data.dataframe_path=/home/stefan/repos/RNAformer/data/rnafold_rfam_dataset.plk \
 trainer.precision=32 \
 RNAformer.precision=32 \
 trainer.devices=8 \
