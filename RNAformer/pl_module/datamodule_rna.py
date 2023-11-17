@@ -36,6 +36,8 @@ class DataModuleRNA(pl.LightningDataModule):
             valid_sets,
             test_sets,
             logger,
+            train_families
+
     ):
         super().__init__()
 
@@ -120,6 +122,7 @@ class DataModuleRNA(pl.LightningDataModule):
 
         self.valid_sets = valid_sets
         self.test_sets = test_sets
+        self.train_families = train_families
 
     def prepare_data(self):
 
@@ -134,7 +137,10 @@ class DataModuleRNA(pl.LightningDataModule):
                 len)]  # remove only '.' samples, should be removed already
             self.logger.info(f'Finished loading dataframe (shape: {df.shape})')
 
-            train_df = df # [df['set'].str.contains("train")]
+            #print(f"###########################################{self.train_families=} ###########asd")
+            trainlist = set(self.train_families)
+            train_df = df[[ a in trainlist for a in df['set'] ]]# df[df['set'].str.contains("train")]
+            #breakpoint()
 
             train_df = train_df[train_df['sequence'].apply(lambda x: self.min_len <= len(x) <= self.max_len)]
             train_df = train_df.reset_index()
@@ -149,7 +155,7 @@ class DataModuleRNA(pl.LightningDataModule):
             self.logger.info(f'Finished preprocessing {len(train_samples)} train samples')
 
             for valid_name in self.valid_sets:
-                valid_df = df[df['set'].str.contains(valid_name)]
+                valid_df = df[df['set'] == valid_name]
                 valid_df = valid_df[valid_df['sequence'].apply(lambda x: self.min_len <= len(x) <= self.max_len)]
                 valid_df = valid_df.reset_index()
                 valid_samples = []
@@ -160,7 +166,7 @@ class DataModuleRNA(pl.LightningDataModule):
                 self.logger.info(f'Finished preprocessing {len(valid_samples)} {valid_name} samples')
 
             for test_name in self.test_sets:
-                test_df = df[df['set'].str.contains(test_name)]
+                test_df = df[df['set']==test_name]
                 test_df = test_df.reset_index()
                 test_samples = []
                 for id, sample in test_df.iterrows():
