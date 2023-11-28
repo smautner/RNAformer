@@ -64,7 +64,7 @@ class PosEmbedding(nn.Module):
 
         return seq_embed
 
-
+import ubergauss.tools as ut
 class EmbedSequence2Matrix(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -80,8 +80,10 @@ class EmbedSequence2Matrix(nn.Module):
         seq_1_embed = self.src_embed_1(src_seq)
         seq_2_embed = self.src_embed_2(src_seq)
 
-        pair_latent = seq_1_embed.unsqueeze(1) + seq_2_embed.unsqueeze(2)
 
+        pair_latent = seq_1_embed.unsqueeze(1) + seq_2_embed.unsqueeze(2)
+        ut.dumpfile((pair_latent,seq_1_embed,seq2_embed),'delme.del')
+        exit()
         pair_latent = self.norm(pair_latent)
 
         return pair_latent
