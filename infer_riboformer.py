@@ -69,7 +69,9 @@ class EvalRNAformer():
         input_sample = {'src_seq': input_sample, 'length': torch.LongTensor([len(input_sample)])[0]}
         batch = self.collator([input_sample])
         with torch.no_grad():
-            logits, mask = self.model(batch['src_seq'].cuda(), batch['length'].cuda(), infer_mean=True)
+            logits, mask = self.model(batch['src_seq'].cuda(),\
+                            batch['length'].cuda(),  batch['pos1id'].cuda(),\
+                            batch['pos2id'].cuda(), infer_mean=True)
         sample_logits = logits[0, :length, :length, -1].detach()
         # triangle mask
         if mean_triual:

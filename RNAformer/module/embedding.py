@@ -76,7 +76,7 @@ class EmbedSequence2Matrix(nn.Module):
 
         self.norm = nn.LayerNorm(config.model_dim)
 
-    def forward(self, src_seq):
+    def forward(self, src_seq, p1,p2):
         seq_1_embed = self.src_embed_1(src_seq)
         seq_2_embed = self.src_embed_2(src_seq)
 

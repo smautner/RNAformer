@@ -44,12 +44,10 @@ class RiboFormer(nn.Module):
         latent = self.RNAformer(pair_act=latent2, pair_mask=pair_mask)
         return latent.detach()
 
-    def forward(self, src_seq=None, src_len=None, infer_mean=False):
+    def forward(self, src_seq=None, src_len=None,p1id=None,p2id=None, infer_mean=False):
 
         pair_mask = self.make_pair_mask(src_seq, src_len)
-
-        pair_latent = self.seq2mat_embed(src_seq)
-
+        pair_latent = self.seq2mat_embed(src_seq,p1id,p2id)
         pair_latent.masked_fill_(pair_mask[:, :, :, None], 0.0)
 
         if self.cycling:

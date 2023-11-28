@@ -243,6 +243,8 @@ class DataModuleRNA(pl.LightningDataModule):
             torch_sample['post_seq'] = src_seq.clone()
             torch_sample['post_struct'] = trg_struct.clone()
 
+
+        breakpoint()
         return torch_sample
 
     def setup(self, stage):

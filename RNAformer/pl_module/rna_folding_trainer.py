@@ -50,7 +50,8 @@ class RNAFoldingTrainer(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
 
-        logits_mat, mask = self.model(batch['src_seq'], batch['length'], infer_mean=True)
+        logits_mat, mask = self.model(batch['src_seq'], batch['length'],batch['pos1id'],\
+                                      batch['pos2id'], infer_mean=True)
         target_mat = batch['trg_mat']
 
         ce_loss = self.loss_train(logits_mat.permute(0, 3, 1, 2), target_mat)
@@ -96,7 +97,9 @@ class RNAFoldingTrainer(pl.LightningModule):
         metrics = defaultdict(list)
 
         with torch.no_grad():
-            logits, mask = self.model(batch['src_seq'], batch['length'], infer_mean=True)
+            # logits, mask = self.model(batch['src_seq'], batch['length'], infer_mean=True)
+            logits, mask = self.model(batch['src_seq'], batch['length'],batch['pos1id'],\
+                                      batch['pos2id'], infer_mean=True)
 
             loss = self.loss_valid(logits.view(-1, logits.size(-1)), batch['trg_mat'].view(-1)).view(
                 batch['trg_mat'].shape)
