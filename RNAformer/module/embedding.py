@@ -68,7 +68,6 @@ import ubergauss.tools as ut
 class EmbedSequence2Matrix(nn.Module):
     def __init__(self, config):
         super().__init__()
-
         self.src_embed_1 = PosEmbedding(config.seq_vocab_size, config.model_dim, config.max_len,
                                         config.rel_pos_enc, config.initializer_range)
         self.src_embed_2 = PosEmbedding(config.seq_vocab_size, config.model_dim, config.max_len,
@@ -82,8 +81,13 @@ class EmbedSequence2Matrix(nn.Module):
 
 
         pair_latent = seq_1_embed.unsqueeze(1) + seq_2_embed.unsqueeze(2)
-        ut.dumpfile((pair_latent,seq_1_embed,seq2_embed),'delme.del')
-        exit()
+        # ut.dumpfile((pair_latent,seq_1_embed,seq_2_embed, src_seq),'delme.del')
+        # exit()
+
         pair_latent = self.norm(pair_latent)
 
+        # hacking in our structure
+        for i in [0,1]:
+            pair_latent[i,:,:,0] = 0
+            pair_latent[i,p1,p2,0] = 1
         return pair_latent
